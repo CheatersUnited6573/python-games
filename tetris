@@ -1,0 +1,79 @@
+import random
+import time
+
+# Directions for moving pieces.
+DIRECTIONS = {
+    'rotate_right': [1, 0, 0, -1, -1, 0, 0, 1, 1, 0, 0, -1, -1, 0, 0, 1],
+    'rotate_left': [0, 1, 1, 0, 0, -1, -1, 0, 0, 1, 1, 0, 0, -1, -1, 0, 0, 1],
+    'down': [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
+    'left': [-1, 0, 0, -1, -1, -1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1],
+    'right': [1, 0, 0, 1, 1, 1, 0, 0, -1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 0, -1]
+}
+
+class Piece:
+    def __init__(self, piece):
+        self.piece = piece
+
+    def get_blocks(self):
+        return [self.piece[i:i+2] for i in range(0, len(self.piece), 2)]
+
+    def rotate(self, direction):
+        self.piece = ''.join([self.piece[i] for i in direction])
+
+class Board:
+    def __init__(self, rows, cols):
+        self.rows = rows
+        self.cols = cols
+        self.board = [[0 for _ in range(cols)] for _ in range(rows)]
+
+    def check_collision(self, piece):
+        for x, y in piece.get_blocks():
+            if x >= self.rows or y >= self.cols or self.board[x][y] == 1:
+                return True
+        return False
+
+    def place_piece(self, piece):
+        for x, y in piece.get_blocks():
+            self.board[x][y] = 1
+
+    def remove_line(self, line):
+        if line < 0 or line >= self.rows:
+            return
+        self.board[line] = [0 for _ in range(self.cols)]
+
+    def check_lines(self):
+        lines_removed = 0
+        for i in range(self.rows):
+            if 0 not in self.board[i]:
+                self.remove_line(i)
+                lines_removed += 1
+        return lines_removed
+
+def create_piece():
+    piece = random.choice([Piece(p) for p in pieces])
+    piece.rotate(DIRECTIONS['rotate_right'])
+    return piece
+
+def main():
+    board = Board(20, 10)
+    score = 0
+    pieces = [
+        'IXXXX',
+        'JLSSS',
+        'OZZZZ',
+        'TSSSS',
+        'ZSSZZ',
+    ]
+
+    current_piece = create_piece()
+    next_piece = create_piece()
+
+    while True:
+        # Move current piece
+        # Check for collisions and place the piece
+        # Remove completed lines
+        # Check for game over
+        pass
+
+if __name__ == "__main__":
+    main()
